@@ -26,7 +26,7 @@ const App = () => {
     const user = localStorage.getItem('user');
     if (token && user) {
       setIsLoggedIn(true);
-      setAuthUser(JSON.parse(user));
+      setAuthUser(JSON.parse(user)); // 'authUser' is assigned here
     }
   }, [theme]);
 
@@ -36,7 +36,7 @@ const App = () => {
 
   const handleLogout = () => {
     setIsLoggedIn(false);
-    setAuthUser(null);
+    setAuthUser(null); // Clear authUser on logout
     localStorage.removeItem('token'); // Clear token on logout
     localStorage.removeItem('user'); // Clear user info on logout
     setCurrentPage('home'); // Redirect to home after logout
@@ -78,6 +78,7 @@ const App = () => {
         handleLogout={handleLogout}
         theme={theme}
         toggleTheme={toggleTheme}
+        authUser={authUser} // <--- authUser is now passed as a prop
       />
       <main className="main-content-area"> {/* Applied main-content-area for consistent padding */}
         {renderPage()}

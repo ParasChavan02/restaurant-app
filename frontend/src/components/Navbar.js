@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 
 // Navbar Component
-const Navbar = ({ setCurrentPage, isLoggedIn, handleLogout, theme, toggleTheme }) => {
+const Navbar = ({ setCurrentPage, isLoggedIn, handleLogout, theme, toggleTheme, authUser }) => { // Receive authUser prop
   const [isOpen, setIsOpen] = useState(false);
 
   return (
@@ -11,7 +11,7 @@ const Navbar = ({ setCurrentPage, isLoggedIn, handleLogout, theme, toggleTheme }
           The Gilded Spoon
         </div>
         <div className="flex items-center space-x-4">
-          {/* Theme Toggle Button - Ensured only one instance */}
+          {/* Theme Toggle Button */}
           <button
             onClick={toggleTheme}
             className="p-2 rounded-full bg-stone-700 hover:bg-stone-600 text-white focus:outline-none focus:ring-2 focus:ring-accent transition-all duration-300"
@@ -28,6 +28,13 @@ const Navbar = ({ setCurrentPage, isLoggedIn, handleLogout, theme, toggleTheme }
             )}
           </button>
 
+          {/* Display user name if logged in and authUser is available */}
+          {isLoggedIn && authUser && (
+            <span className="text-navbar text-sm md:text-base hidden md:inline-block font-medium">
+              Welcome, {authUser.name}!
+            </span>
+          )}
+
           <div className="md:hidden">
             <button onClick={() => setIsOpen(!isOpen)} className="text-white focus:outline-none">
               <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
@@ -36,7 +43,7 @@ const Navbar = ({ setCurrentPage, isLoggedIn, handleLogout, theme, toggleTheme }
             </button>
           </div>
         </div>
-        <ul className={`md:flex md:space-x-8 absolute md:static bg-navbar md:bg-transparent w-full left-0 py-4 md:py-0 transition-all duration-300 ease-in-out ${isOpen ? 'top-full opacity-100' : '-top-full opacity-0 md:opacity-100'}`}> {/* Adjusted top for mobile menu */}
+        <ul className={`md:flex md:space-x-8 absolute md:static bg-navbar md:bg-transparent w-full left-0 py-4 md:py-0 transition-all duration-300 ease-in-out ${isOpen ? 'top-full opacity-100' : '-top-full opacity-0 md:opacity-100'}`}>
           <li><button onClick={() => { setCurrentPage('home'); setIsOpen(false); }} className="block px-4 py-2 md:p-0 text-navbar hover:text-accent navbar-link-hover rounded-md">Home</button></li>
           <li><button onClick={() => { setCurrentPage('menu'); setIsOpen(false); }} className="block px-4 py-2 md:p-0 text-navbar hover:text-accent navbar-link-hover rounded-md">Menu</button></li>
           <li><button onClick={() => { setCurrentPage('reservations'); setIsOpen(false); }} className="block px-4 py-2 md:p-0 text-navbar hover:text-accent navbar-link-hover rounded-md">Reservations</button></li>
