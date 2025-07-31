@@ -21,7 +21,7 @@ const app = express();
 // Middleware
 app.use(express.json()); // Body parser for JSON data
 app.use(cors({
-  origin: 'https://gilded-spoon-api.onrender.com',
+  origin: 'https://restaurant-app-pjxw.onrender.com/',
   credentials: true
 })); // Enable CORS for specific origin
 
