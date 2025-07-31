@@ -1,6 +1,6 @@
 // Define your backend API base URL
 // IMPORTANT: Change this to your deployed backend URL when deploying to Render!
-const API_BASE_URL = 'https://gilded-spoon-api.onrender.com';
+const API_BASE_URL = 'https://gilded-spoon-api.onrender.com/api';
 
 // Helper function for making authenticated requests
 const fetchWithAuth = async (url, options = {}) => {

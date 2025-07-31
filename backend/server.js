@@ -1,55 +1,54 @@
-    const express = require('express');
-    const dotenv = require('dotenv');
-    const cors = require('cors');
-    const connectDB = require('./config/db');
+const express = require('express');
+const dotenv = require('dotenv');
+const cors = require('cors');
+const connectDB = require('./config/db');
 
-    // Import routes
-    const userRoutes = require('./routes/authRoutes');
-    const menuRoutes = require('./routes/menuRoutes');
-    const reservationRoutes = require('./routes/reservationRoutes');
-    const eventRoutes = require('./routes/eventRoutes');
-    const reviewRoutes = require('./routes/reviewRoutes');
+// Import routes
+const userRoutes = require('./routes/authRoutes');
+const menuRoutes = require('./routes/menuRoutes');
+const reservationRoutes = require('./routes/reservationRoutes');
+const eventRoutes = require('./routes/eventRoutes');
+const reviewRoutes = require('./routes/reviewRoutes');
 
-    // Load environment variables
-    dotenv.config();
+// Load environment variables
+dotenv.config();
 
-    // Connect to MongoDB
-    connectDB();
+// Connect to MongoDB
+connectDB();
 
-    const app = express();
+const app = express();
 
-    // Middleware
-    app.use(express.json()); // Body parser for JSON data
+// Middleware
+app.use(express.json()); // Body parser for JSON data
 
-    // >>> FIX: Update CORS origin to exactly match your Netlify frontend URL <<<
-    app.use(cors({
-      origin: 'https://restaurantapp02.netlify.app/' // <--- REPLACE WITH YOUR ACTUAL NETLIFY URL
-      // You can also include localhost for local development:
-      // origin: ['https://your-netlify-site.netlify.app', 'http://localhost:3000']
-    }));
+// Configure CORS to allow requests from your Netlify frontend
+app.use(cors({
+  origin: 'https://restaurantapp02.netlify.app' // Corrected Netlify frontend URL
+  // You can also include localhost for local development if needed:
+  // origin: ['https://restaurantapp02.netlify.app', 'http://localhost:3000']
+}));
 
-    // Define a simple root route for testing
-    app.get('/', (req, res) => {
-      res.send('API is running...');
-    });
+// Define a simple root route for testing
+app.get('/', (req, res) => {
+  res.send('API is running...');
+});
 
-    // Mount API routes
-    app.use('/api/users', userRoutes);
-    app.use('/api/menu', menuRoutes);
-    app.use('/api/reservations', reservationRoutes);
-    app.use('/api/events', eventRoutes);
-    app.use('/api/reviews', reviewRoutes);
+// Mount API routes
+app.use('/api/users', userRoutes);
+app.use('/api/menu', menuRoutes);
+app.use('/api/reservations', reservationRoutes);
+app.use('/api/events', eventRoutes);
+app.use('/api/reviews', reviewRoutes);
 
-    // Basic Error Handling Middleware (optional, for development)
-    app.use((err, req, res, next) => {
-      console.error(err.stack);
-      res.status(500).send('Something broke!');
-    });
+// Basic Error Handling Middleware (optional, for development)
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).send('Something broke!');
+});
 
 
-    const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 5000;
 
-    app.listen(PORT, () => {
-      console.log(`Server running on port ${PORT}`);
-    });
-    
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
+});
