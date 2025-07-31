@@ -21,9 +21,11 @@
     // Middleware
     app.use(express.json()); // Body parser for JSON data
 
-    // >>> FIX: Update CORS origin to exactly match your frontend's URL without trailing slash <<<
+    // >>> FIX: Update CORS origin to exactly match your Netlify frontend URL <<<
     app.use(cors({
-      origin: 'https://restaurant-app-pjxw.onrender.com' // <--- EXACT MATCH FOR YOUR FRONTEND URL
+      origin: 'https://restaurantapp02.netlify.app/' // <--- REPLACE WITH YOUR ACTUAL NETLIFY URL
+      // You can also include localhost for local development:
+      // origin: ['https://your-netlify-site.netlify.app', 'http://localhost:3000']
     }));
 
     // Define a simple root route for testing
