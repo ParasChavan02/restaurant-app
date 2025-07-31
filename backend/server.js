@@ -23,7 +23,7 @@
 
     // >>> FIX: Update CORS origin to exactly match your frontend's URL without trailing slash <<<
     app.use(cors({
-      origin: 'https://restaurant-app-pjxw.onrender.com' // <--- EXACT MATCH FOR YOUR FRONTEND URL
+      origin: 'https://restaurantapp02.netlify.app/' // <--- EXACT MATCH FOR YOUR FRONTEND URL
     }));
 
     // Define a simple root route for testing
