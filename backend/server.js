@@ -20,7 +20,10 @@ const app = express();
 
 // Middleware
 app.use(express.json()); // Body parser for JSON data
-app.use(cors()); // Enable CORS for all origins (adjust in production)
+app.use(cors({
+  origin: 'https://gilded-spoon-api.onrender.com',
+  credentials: true
+})); // Enable CORS for specific origin
 
 // Define a simple root route for testing
 app.get('/', (req, res) => {
