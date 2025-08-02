@@ -6,6 +6,8 @@ A full-stack restaurant management application with user authentication, menu, r
 
 [View Live Demo](https://restaurantapp02.netlify.app/)
 
+Backend https://gilded-spoon-api.onrender.com
+
 ## Features
 - User authentication (register/login)
 - View and manage menu
