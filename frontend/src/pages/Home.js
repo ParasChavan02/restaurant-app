@@ -21,7 +21,7 @@ const Home = ({ setCurrentPage }) => {
         </p>
         <button
           onClick={() => setCurrentPage('reservations')}
-          className="btn-primary" /* Using the global btn-primary class */
+          className="btn-primary text-lg px-8 py-4"
         >
           Make a Reservation
         </button>

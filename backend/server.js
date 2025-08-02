@@ -21,11 +21,25 @@ const app = express();
 // Middleware
 app.use(express.json()); // Body parser for JSON data
 
-// Configure CORS to allow requests from your Netlify frontend
+// Configure CORS to allow requests from both production and development
+const allowedOrigins = [
+  'https://restaurantapp02.netlify.app',
+  'http://localhost:3000',
+  'http://localhost:3001'
+];
+
 app.use(cors({
-  origin: 'https://restaurantapp02.netlify.app' // Corrected Netlify frontend URL
-  // You can also include localhost for local development if needed:
-  // origin: ['https://restaurantapp02.netlify.app', 'http://localhost:3000']
+  origin: function (origin, callback) {
+    // Allow requests with no origin (like mobile apps or curl requests)
+    if (!origin) return callback(null, true);
+    
+    if (allowedOrigins.indexOf(origin) !== -1) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  credentials: true
 }));
 
 // Define a simple root route for testing

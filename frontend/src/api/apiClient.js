@@ -2,6 +2,7 @@
 // all API service functions, so other components can import
 // them from a single 'api' object.
 
+// Import from mock API service instead of real API
 import {
   loginUser,
   registerUser,
@@ -11,7 +12,7 @@ import {
   fetchReviews,
   submitReview,
   submitContactForm,
-} from './apiService'; // Import from the new apiService.js
+} from './mockApiService'; // Import from mock API service
 
 const api = {
   loginUser,

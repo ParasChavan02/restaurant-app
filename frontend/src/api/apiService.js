@@ -1,6 +1,8 @@
 // Define your backend API base URL
-// IMPORTANT: Change this to your deployed backend URL when deploying to Render!
-const API_BASE_URL = 'https://gilded-spoon-api.onrender.com/api';
+// For development, use localhost. For production, use the deployed URL
+const API_BASE_URL = process.env.NODE_ENV === 'production' 
+  ? 'https://gilded-spoon-api.onrender.com/api'
+  : 'http://localhost:5000/api';
 
 // Helper function for making authenticated requests
 const fetchWithAuth = async (url, options = {}) => {
@@ -15,99 +17,144 @@ const fetchWithAuth = async (url, options = {}) => {
     headers['Authorization'] = `Bearer ${token}`;
   }
 
-  const response = await fetch(url, {
-    ...options,
-    headers,
-  });
+  try {
+    const response = await fetch(url, {
+      ...options,
+      headers,
+    });
 
-  if (!response.ok) {
-    const errorData = await response.json();
-    throw new Error(errorData.message || 'Something went wrong with the API request.');
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({ message: 'Network error' }));
+      throw new Error(errorData.message || 'Something went wrong with the API request.');
+    }
+
+    return response.json();
+  } catch (error) {
+    console.error('API Request Error:', error);
+    throw error;
   }
-
-  return response.json();
 };
 
 // --- User/Auth API Calls ---
 export const loginUser = async (credentials) => {
-  const response = await fetch(`${API_BASE_URL}/users/login`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(credentials),
-  });
+  try {
+    const response = await fetch(`${API_BASE_URL}/users/login`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(credentials),
+    });
 
-  if (!response.ok) {
-    const errorData = await response.json();
-    throw new Error(errorData.message || 'Login failed.');
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.message || 'Login failed.');
+    }
+    const data = await response.json();
+    localStorage.setItem('token', data.token); // Store token
+    localStorage.setItem('user', JSON.stringify(data.user)); // Store user info
+    return { success: true, message: 'Login successful!', user: data };
+  } catch (error) {
+    console.error('Login Error:', error);
+    throw error;
   }
-  const data = await response.json();
-  localStorage.setItem('token', data.token); // Store token
-  localStorage.setItem('user', JSON.stringify(data.user)); // Store user info
-  return { success: true, message: 'Login successful!', user: data };
 };
 
 export const registerUser = async (userData) => {
-  const response = await fetch(`${API_BASE_URL}/users/register`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(userData),
-  });
+  try {
+    const response = await fetch(`${API_BASE_URL}/users/register`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(userData),
+    });
 
-  if (!response.ok) {
-    const errorData = await response.json();
-    throw new Error(errorData.message || 'Registration failed.');
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.message || 'Registration failed.');
+    }
+    const data = await response.json();
+    return { success: true, message: 'Registration successful! Please log in.', user: data };
+  } catch (error) {
+    console.error('Registration Error:', error);
+    throw error;
   }
-  const data = await response.json();
-  return { success: true, message: 'Registration successful! Please log in.', user: data };
 };
 
 // --- Menu API Calls ---
 export const fetchMenus = async () => {
-  const data = await fetchWithAuth(`${API_BASE_URL}/menu`);
-  // Ensure data is an array before reducing. If not, or empty, return empty object.
-  if (!Array.isArray(data) || data.length === 0) {
-    return {}; // Return an empty object if no menu items or data is not an array
-  }
-
-  const groupedMenu = data.reduce((acc, item) => {
-    // Ensure item.category exists before calling replace
-    const categoryKey = item.category ? item.category.replace(/\s+/g, '').toLowerCase() : 'uncategorized';
-    if (!acc[categoryKey]) {
-      acc[categoryKey] = [];
+  try {
+    console.log('Fetching menu from:', `${API_BASE_URL}/menu`);
+    const data = await fetchWithAuth(`${API_BASE_URL}/menu`);
+    
+    // Ensure data is an array before reducing. If not, or empty, return empty object.
+    if (!Array.isArray(data) || data.length === 0) {
+      console.log('No menu items received, returning empty object');
+      return {}; // Return an empty object if no menu items or data is not an array
     }
-    acc[categoryKey].push(item);
-    return acc;
-  }, {});
-  return groupedMenu;
+
+    const groupedMenu = data.reduce((acc, item) => {
+      // Ensure item.category exists before calling replace
+      const categoryKey = item.category ? item.category.replace(/\s+/g, '').toLowerCase() : 'uncategorized';
+      if (!acc[categoryKey]) {
+        acc[categoryKey] = [];
+      }
+      acc[categoryKey].push(item);
+      return acc;
+    }, {});
+    
+    console.log('Menu data processed successfully:', groupedMenu);
+    return groupedMenu;
+  } catch (error) {
+    console.error('Error fetching menu:', error);
+    throw new Error('Failed to fetch menu data. Please try again later.');
+  }
 };
 
 // --- Reservation API Calls ---
 export const submitReservation = async (reservationData) => {
-  const data = await fetchWithAuth(`${API_BASE_URL}/reservations`, {
-    method: 'POST',
-    body: JSON.stringify(reservationData),
-  });
-  return { success: true, message: 'Reservation confirmed!', data };
+  try {
+    const data = await fetchWithAuth(`${API_BASE_URL}/reservations`, {
+      method: 'POST',
+      body: JSON.stringify(reservationData),
+    });
+    return { success: true, message: 'Reservation confirmed!', data };
+  } catch (error) {
+    console.error('Reservation Error:', error);
+    throw error;
+  }
 };
 
 // --- Event API Calls ---
 export const fetchEvents = async () => {
-  const data = await fetchWithAuth(`${API_BASE_URL}/events`);
-  return data;
+  try {
+    const data = await fetchWithAuth(`${API_BASE_URL}/events`);
+    return data;
+  } catch (error) {
+    console.error('Events Error:', error);
+    throw error;
+  }
 };
 
 // --- Review API Calls ---
 export const fetchReviews = async () => {
-  const data = await fetchWithAuth(`${API_BASE_URL}/reviews`);
-  return data;
+  try {
+    const data = await fetchWithAuth(`${API_BASE_URL}/reviews`);
+    return data;
+  } catch (error) {
+    console.error('Reviews Error:', error);
+    throw error;
+  }
 };
 
 export const submitReview = async (reviewData) => {
-  const data = await fetchWithAuth(`${API_BASE_URL}/reviews`, {
-    method: 'POST',
-    body: JSON.stringify(reviewData),
-  });
-  return { success: true, message: 'Review submitted successfully!', data };
+  try {
+    const data = await fetchWithAuth(`${API_BASE_URL}/reviews`, {
+      method: 'POST',
+      body: JSON.stringify(reviewData),
+    });
+    return { success: true, message: 'Review submitted successfully!', data };
+  } catch (error) {
+    console.error('Review Submission Error:', error);
+    throw error;
+  }
 };
 
 // --- Contact Form (Frontend only simulation, or you'd add a backend endpoint) ---

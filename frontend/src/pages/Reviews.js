@@ -125,7 +125,11 @@ const Reviews = () => {
               className="input-field shadow appearance-none rounded-md w-full py-3 px-4 leading-tight"></textarea>
           </div>
           <div className="text-center">
-            <button type="submit" disabled={submitting} className="btn-modern disabled:opacity-50 disabled:cursor-not-allowed">
+            <button 
+              type="submit" 
+              disabled={submitting} 
+              className="btn-primary disabled:opacity-50 disabled:cursor-not-allowed w-full"
+            >
               <span>{submitting ? 'Submitting...' : 'Submit Review'}</span>
             </button>
           </div>

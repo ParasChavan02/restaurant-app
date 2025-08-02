@@ -5,7 +5,7 @@ const reviewSchema = mongoose.Schema(
     user: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'User',
-      required: true, // Reviews must be tied to a user
+      required: false, // Made optional for seed data and anonymous reviews
     },
     author: { // Name of the reviewer (could also pull from user.name)
       type: String,

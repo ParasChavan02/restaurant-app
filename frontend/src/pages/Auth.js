@@ -53,21 +53,27 @@ const Auth = ({ setIsLoggedIn, setAuthUser }) => {
       <h2 className="text-5xl font-extrabold text-center text-text-primary mb-12">
         {isLogin ? 'Login' : 'Create Account'}
       </h2>
-      <div className="max-w-md mx-auto card-modern p-8">
-        <div className="flex justify-center mb-6 gap-2">
+      <div className="max-w-md mx-auto bg-card p-8 rounded-lg shadow-custom border border-card">
+        <div className="flex justify-center mb-8 gap-1">
           <button
             type="button"
             onClick={() => setIsLogin(true)}
-            className={`btn-modern px-8 py-2 font-semibold rounded-full transition-all duration-300 shadow-md ${isLogin ? 'bg-accent text-white scale-105' : 'bg-primary text-text-secondary opacity-70 hover:scale-105'}`}
-            style={{ borderTopRightRadius: 0, borderBottomRightRadius: 0 }}
+            className={`px-8 py-3 font-semibold rounded-l-full transition-all duration-300 shadow-md ${
+              isLogin 
+                ? 'bg-accent text-white scale-105 shadow-lg' 
+                : 'bg-gray-200 text-gray-600 hover:bg-gray-300'
+            }`}
           >
             Login
           </button>
           <button
             type="button"
             onClick={() => setIsLogin(false)}
-            className={`btn-modern px-8 py-2 font-semibold rounded-full transition-all duration-300 shadow-md ${!isLogin ? 'bg-accent text-white scale-105' : 'bg-primary text-text-secondary opacity-70 hover:scale-105'}`}
-            style={{ borderTopLeftRadius: 0, borderBottomLeftRadius: 0 }}
+            className={`px-8 py-3 font-semibold rounded-r-full transition-all duration-300 shadow-md ${
+              !isLogin 
+                ? 'bg-accent text-white scale-105 shadow-lg' 
+                : 'bg-gray-200 text-gray-600 hover:bg-gray-300'
+            }`}
           >
             Signup
           </button>
@@ -75,31 +81,35 @@ const Auth = ({ setIsLoggedIn, setAuthUser }) => {
 
         <form onSubmit={handleSubmit}>
           {!isLogin && (
-            <div className="mb-4">
+            <div className="mb-6">
               <label htmlFor="auth-name" className="block text-text-primary text-sm font-bold mb-2">Name</label>
               <input type="text" id="auth-name" name="name" value={formData.name} onChange={handleChange} required={!isLogin}
                 className="input-field shadow appearance-none rounded-md w-full py-3 px-4 leading-tight" />
             </div>
           )}
-          <div className="mb-4">
+          <div className="mb-6">
             <label htmlFor="auth-email" className="block text-text-primary text-sm font-bold mb-2">Email</label>
             <input type="email" id="auth-email" name="email" value={formData.email} onChange={handleChange} required
               className="input-field shadow appearance-none rounded-md w-full py-3 px-4 leading-tight" />
           </div>
-          <div className="mb-4">
+          <div className="mb-6">
             <label htmlFor="auth-password" className="block text-text-primary text-sm font-bold mb-2">Password</label>
             <input type="password" id="auth-password" name="password" value={formData.password} onChange={handleChange} required
               className="input-field shadow appearance-none rounded-md w-full py-3 px-4 leading-tight" />
           </div>
           {!isLogin && (
-            <div className="mb-6">
+            <div className="mb-8">
               <label htmlFor="auth-confirm-password" className="block text-text-primary text-sm font-bold mb-2">Confirm Password</label>
               <input type="password" id="auth-confirm-password" name="confirmPassword" value={formData.confirmPassword} onChange={handleChange} required={!isLogin}
                 className="input-field shadow appearance-none rounded-md w-full py-3 px-4 leading-tight" />
             </div>
           )}
           <div className="text-center">
-            <button type="submit" disabled={loading} className="btn-modern disabled:opacity-50 disabled:cursor-not-allowed">
+            <button 
+              type="submit" 
+              disabled={loading} 
+              className="btn-primary disabled:opacity-50 disabled:cursor-not-allowed w-full"
+            >
               <span>{loading ? (isLogin ? 'Logging In...' : 'Signing Up...'): (isLogin ? 'Login' : 'Signup')}</span>
             </button>
           </div>
